@@ -936,7 +936,7 @@ tile_data = PoolIntArray( 65537, 0, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65
 [node name="YSort" type="YSort" parent="."]
 
 [node name="player_character" type="KinematicBody2D" parent="YSort" groups=["player_character"]]
-position = Vector2( 64, 96 )
+position = Vector2( 80, 96 )
 z_index = 1
 script = ExtResource( 2 )
 speed = 70
