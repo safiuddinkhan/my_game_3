@@ -10,7 +10,8 @@ var line2d
 var char_ang
 var nav_path
 var label
-
+var req_state
+var new_state
 
 
 
@@ -22,6 +23,8 @@ func _ready():
 	line2d = tree.get_nodes_in_group("line2d")[0]
 	label = tree.get_nodes_in_group("label1")[0]
 	state = 0
+	req_state = 0
+	new_state = 0
 	$NavigationAgent2D.path_max_distance = 1
 
 func navigate():
@@ -50,7 +53,7 @@ func _physics_process(_delta):
 		
 		sprite_dir = int(char_ang / 60.0)
 #		print("sprite_dir:", char_ang / 60.0," rounded:", sprite_dir)
-		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)
+		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
 		if abs(sprite_dir) >= 2:
 			$AnimatedSprite.play("walk_left")
 		elif abs(sprite_dir) == 0:
@@ -66,7 +69,7 @@ func _physics_process(_delta):
 		body_ang = floor(rad2deg(direction.angle()))
 		$Area2D.rotation_degrees = body_ang
 		sprite_dir = int(body_ang / 60.0)
-		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)
+		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
 		if abs(sprite_dir) >= 2:
 			$AnimatedSprite.play("attack_left")
 		elif abs(sprite_dir) == 0:
@@ -75,8 +78,7 @@ func _physics_process(_delta):
 			$AnimatedSprite.play("attack_down")
 		elif sprite_dir == -1:
 			$AnimatedSprite.play("attack_up")
-
-
+	
 
 
 
@@ -125,16 +127,19 @@ func _on_NavigationAgent2D_path_changed():
 func _on_Area2D_body_exited(body):
 	print("body exited:",body.name)
 	if(body.name == "player_character"):
-		state = 0
-		$attack_timer.stop()
+		req_state = 1
+		new_state = 0
+#		state = 0
+
 
 
 func _on_Area2D_body_entered(body):
 	print("body entered:",body.name)
 	if(body.name == "player_character"):
-		$attack_timer.start(0.5)
+		req_state = 1
+		new_state = 1
 
-#		$AnimatedSprite.stop()
+
 
 
 
@@ -145,11 +150,14 @@ func _on_Area2D_mouse_entered():
 
 
 func _on_AnimatedSprite_animation_finished():
-	pass
-#	$AnimatedSprite.stop()
+	if req_state == 1:
+		print("State change requested. Changing to State ",new_state)
+		req_state = 0
+		state = new_state
+#	pass
 
 
-func _on_attack_timer_timeout():
-	print("Activating Attack State")
-	state = 1
+
+
+
 

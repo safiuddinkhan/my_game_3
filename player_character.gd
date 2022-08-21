@@ -14,12 +14,14 @@ var nav_path
 var state
 
 
+
 func _ready():
 	screen_size = get_viewport_rect().size
 	var tree = get_tree()
 	line2d = tree.get_nodes_in_group("line2d1")[0]
 	state = 0
-	$NavigationAgent2D.path_max_distance = 1
+#	$NavigationAgent2D.path_max_distance = 1
+
 
 
 func navigate():
@@ -31,19 +33,19 @@ func navigate():
 
 
 
-func _unhandled_input(event):
-	if not event.is_action_pressed("click"):
-		return
-	goto_loc = Navigation2DServer.map_get_closest_point($NavigationAgent2D.get_navigation_map(), get_global_mouse_position())
-	nav_path = Navigation2DServer.map_get_path($NavigationAgent2D.get_navigation_map(),global_position,goto_loc,false)
-	nav_path.remove(0)
-	print("nav path:",nav_path)
-	$NavigationAgent2D.set_target_location(goto_loc)
-	if $NavigationAgent2D.is_target_reachable():
-		print("target reachable")
-	else:
-		print("target not reachabe")	
-	state = 1
+#func _unhandled_input(event):
+#	if not event.is_action_pressed("click"):
+#		return
+#	goto_loc = Navigation2DServer.map_get_closest_point($NavigationAgent2D.get_navigation_map(), get_global_mouse_position())
+#	nav_path = Navigation2DServer.map_get_path($NavigationAgent2D.get_navigation_map(),global_position,goto_loc,false)
+#	nav_path.remove(0)
+#	print("nav path:",nav_path)
+#	$NavigationAgent2D.set_target_location(goto_loc)
+#	if $NavigationAgent2D.is_target_reachable():
+#		print("target reachable")
+#	else:
+#		print("target not reachabe")	
+#	state = 1
 
 
 func move_char_ani():
@@ -63,13 +65,68 @@ func move_char_ani():
 
 
 func _physics_process(_delta):
-#	direction = Vector2.ZERO
+	direction = Vector2.ZERO
 #	var distance = 0
 
+	if Input.is_action_just_pressed("ui_attack"):
+		state = 1
+	
+	if state == 0:
+		if Input.is_action_pressed("ui_left"):
+			$AnimatedSprite.play("walk_left")
+			pc_dir = 1
+			direction.x = direction.x - 1
+			if Input.is_action_pressed("ui_up"):
+				direction.y = direction.y - 1
+			elif Input.is_action_pressed("ui_down"):
+				direction.y = direction.y + 1
+	
+		elif Input.is_action_pressed("ui_right"):
+			$AnimatedSprite.play("walk_right")
+			pc_dir = 2
+			direction.x = direction.x + 1
+			if Input.is_action_pressed("ui_up"):
+				direction.y = direction.y - 1
+			elif Input.is_action_pressed("ui_down"):
+				direction.y = direction.y + 1
+	
+	
+		elif Input.is_action_pressed("ui_up"):
+			$AnimatedSprite.play("walk_up")
+			pc_dir = 3
+			direction.y = direction.y - 1
+	
+		elif Input.is_action_pressed("ui_down"):
+			$AnimatedSprite.play("walk_down")
+			pc_dir = 4
+			direction.y = direction.y + 1
+		else:
+			$AnimatedSprite.stop()
+
+
 	if state == 1:
-		navigate()
-		move_char_ani()
-		ret_vel = move_and_slide(direction * speed)
+		if pc_dir == 1:
+			$AnimatedSprite.play("attack_left")
+		elif pc_dir == 2:
+			$AnimatedSprite.play("attack_right")
+		elif pc_dir == 3:
+			$AnimatedSprite.play("attack_up")
+		elif pc_dir == 4:
+			$AnimatedSprite.play("attack_down")
+			
+
+	if direction.length() > 1:
+		direction = direction.normalized()
+
+	ret_vel = move_and_slide(direction * speed)
+#	for i in get_slide_count():
+#		var collision = get_slide_collision(i)
+#		print("I collided with ", collision.collider.name)
+
+#	if state == 1:
+#		navigate()
+#		move_char_ani()
+#		ret_vel = move_and_slide(direction * speed)
 #		$NavigationAgent2D.set_velocity(direction*speed)
 
 
@@ -119,7 +176,9 @@ func _physics_process(_delta):
 
 
 func _on_AnimatedSprite_animation_finished():
-	pass
+	if state == 1:
+		$AnimatedSprite.stop()
+		state = 0
 
 
 
