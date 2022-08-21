@@ -50,7 +50,6 @@ func _physics_process(_delta):
 		navigate()
 		char_ang = floor(rad2deg(direction.angle()))
 		$Area2D.rotation_degrees = char_ang
-		
 		sprite_dir = int(char_ang / 60.0)
 #		print("sprite_dir:", char_ang / 60.0," rounded:", sprite_dir)
 		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
@@ -129,6 +128,7 @@ func _on_Area2D_body_exited(body):
 	if(body.name == "player_character"):
 		req_state = 1
 		new_state = 0
+		$CollisionShape2D.shape.extents = Vector2(8, 8)
 #		state = 0
 
 
@@ -138,6 +138,7 @@ func _on_Area2D_body_entered(body):
 	if(body.name == "player_character"):
 		req_state = 1
 		new_state = 1
+		$CollisionShape2D.shape.extents = Vector2(24, 8)
 
 
 
