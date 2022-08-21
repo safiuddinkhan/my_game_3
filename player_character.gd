@@ -74,7 +74,7 @@ func _physics_process(_delta):
 	if state == 0:
 		if Input.is_action_pressed("ui_left"):
 			$AnimatedSprite.play("walk_left")
-			$CollisionShape2D.shape.extents = Vector2(16, 8)
+#			$CollisionShape2D.shape.extents = Vector2(16, 8)
 			pc_dir = 1
 			direction.x = direction.x - 1
 			if Input.is_action_pressed("ui_up"):
@@ -83,7 +83,7 @@ func _physics_process(_delta):
 				direction.y = direction.y + 1
 	
 		elif Input.is_action_pressed("ui_right"):
-			$CollisionShape2D.shape.extents = Vector2(16, 8)
+#			$CollisionShape2D.shape.extents = Vector2(16, 8)
 			$AnimatedSprite.play("walk_right")
 			pc_dir = 2
 			direction.x = direction.x + 1
@@ -94,13 +94,13 @@ func _physics_process(_delta):
 	
 	
 		elif Input.is_action_pressed("ui_up"):
-			$CollisionShape2D.shape.extents = Vector2(18, 8)
+#			$CollisionShape2D.shape.extents = Vector2(18, 8)
 			$AnimatedSprite.play("walk_up")
 			pc_dir = 3
 			direction.y = direction.y - 1
 	
 		elif Input.is_action_pressed("ui_down"):
-			$CollisionShape2D.shape.extents = Vector2(18, 8)
+#			$CollisionShape2D.shape.extents = Vector2(18, 8)
 			$AnimatedSprite.play("walk_down")
 			pc_dir = 4
 			direction.y = direction.y + 1
