@@ -10,9 +10,11 @@ var line2d
 var char_ang
 var nav_path
 var label
+var label3
 var req_state
 var new_state
 
+#var frame_count = 0
 
 
 
@@ -22,14 +24,17 @@ func _ready():
 	player_character = tree.get_nodes_in_group("player_character")[0]
 	line2d = tree.get_nodes_in_group("line2d")[0]
 	label = tree.get_nodes_in_group("label1")[0]
+	label3 = tree.get_nodes_in_group("label3")[0]
 	state = 0
 	req_state = 0
 	new_state = 0
-	$NavigationAgent2D.path_max_distance = 1
+
+#	$NavigationAgent2D.path_max_distance = 1
 
 func navigate():
 	var player_pos = player_character.global_position
 	var next_location
+	nav_path = Navigation2DServer.map_get_path($NavigationAgent2D.get_navigation_map(),global_position,player_pos,true)
 	$NavigationAgent2D.set_target_location(player_pos)
 	next_location = $NavigationAgent2D.get_next_location()
 	direction = global_position.direction_to(next_location)
@@ -38,21 +43,22 @@ func navigate():
 	line2d.points = curr_path
 
 
-
 func _physics_process(_delta):
 
 #	if frame_count == 0:
-#		navigate()
+#		update_pc_location()
+
 	var sprite_dir
 
 
 	if state == 0:
 		navigate()
-		char_ang = floor(rad2deg(direction.angle()))
-		$Area2D.rotation_degrees = char_ang
+		char_ang = rad2deg(direction.angle())
+#		$Area2D.rotation_degrees = char_ang
 		sprite_dir = int(char_ang / 60.0)
-#		print("sprite_dir:", char_ang / 60.0," rounded:", sprite_dir)
+#		print("sprite_dir:", char_ang / 60.0," rounded:", sprite_dir, " raw ang:",rad2deg(direction.angle()))
 		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
+		label3.text = "dir:"+str(direction)
 		if abs(sprite_dir) >= 2:
 			$AnimatedSprite.play("walk_left")
 		elif abs(sprite_dir) == 0:
@@ -64,9 +70,9 @@ func _physics_process(_delta):
 		ret_vel = self.move_and_slide(direction * speed)
 	elif state == 1:
 		var body_ang
-		direction = global_position.direction_to(player_character.global_position)
-		body_ang = floor(rad2deg(direction.angle()))
-		$Area2D.rotation_degrees = body_ang
+#		direction = global_position.direction_to(player_character.global_position)
+		body_ang = rad2deg(direction.angle())
+#		$Area2D.rotation_degrees = body_ang
 		sprite_dir = int(body_ang / 60.0)
 		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
 		if abs(sprite_dir) >= 2:
@@ -79,7 +85,7 @@ func _physics_process(_delta):
 			$AnimatedSprite.play("attack_up")
 	
 
-
+#		frame_count = frame_count + 1
 
 
 
@@ -128,7 +134,7 @@ func _on_Area2D_body_exited(body):
 	if(body.name == "player_character"):
 		req_state = 1
 		new_state = 0
-		$CollisionShape2D.shape.extents = Vector2(8, 8)
+#		$CollisionShape2D.shape.extents = Vector2(10, 4)
 #		state = 0
 
 
@@ -138,7 +144,7 @@ func _on_Area2D_body_entered(body):
 	if(body.name == "player_character"):
 		req_state = 1
 		new_state = 1
-		$CollisionShape2D.shape.extents = Vector2(24, 8)
+#		$CollisionShape2D.shape.extents = Vector2(24, 4)
 
 
 
