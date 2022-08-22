@@ -54,7 +54,7 @@ func _physics_process(_delta):
 	if state == 0:
 		navigate()
 		char_ang = rad2deg(direction.angle())
-#		$Area2D.rotation_degrees = char_ang
+		$Area2D.rotation_degrees = char_ang
 		sprite_dir = int(char_ang / 60.0)
 #		print("sprite_dir:", char_ang / 60.0," rounded:", sprite_dir, " raw ang:",rad2deg(direction.angle()))
 		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
@@ -72,7 +72,7 @@ func _physics_process(_delta):
 		var body_ang
 #		direction = global_position.direction_to(player_character.global_position)
 		body_ang = rad2deg(direction.angle())
-#		$Area2D.rotation_degrees = body_ang
+		$Area2D.rotation_degrees = body_ang
 		sprite_dir = int(body_ang / 60.0)
 		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
 		if abs(sprite_dir) >= 2:

@@ -901,8 +901,8 @@ animations = [ {
 "speed": 15.0
 } ]
 
-[sub_resource type="CircleShape2D" id=253]
-radius = 38.0
+[sub_resource type="RayShape2D" id=250]
+length = 40.0
 
 [sub_resource type="RectangleShape2D" id=246]
 extents = Vector2( 15, 4 )
@@ -960,6 +960,7 @@ frames = SubResource( 168 )
 animation = "walk_left"
 
 [node name="Line2D" type="Line2D" parent="YSort/enemy_character" groups=["line2d"]]
+visible = false
 width = 2.0
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="YSort/enemy_character"]
@@ -969,7 +970,7 @@ position = Vector2( 0, 26 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/enemy_character/Area2D"]
 rotation = 4.71239
-shape = SubResource( 253 )
+shape = SubResource( 250 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/enemy_character"]
 position = Vector2( 0, 26 )
