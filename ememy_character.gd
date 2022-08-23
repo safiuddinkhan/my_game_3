@@ -67,7 +67,8 @@ func _physics_process(_delta):
 			$AnimatedSprite.play("walk_down")
 		elif sprite_dir == -1:
 			$AnimatedSprite.play("walk_up")
-		ret_vel = self.move_and_slide(direction * speed)
+		#ret_vel = self.move_and_slide(direction * speed)
+		$NavigationAgent2D.set_velocity(direction * speed)
 	elif state == 1:
 		var body_ang
 #		direction = global_position.direction_to(player_character.global_position)
@@ -117,12 +118,6 @@ func _on_NavigationAgent2D_velocity_computed(safe_velocity):
 #		print("I collided with ", collision.collider.name)
 #		if(collision.collider.name == "player_character"):
 #			state = 0
-
-
-
-
-func _on_NavigationAgent2D_path_changed():
-	state = 0
 
 
 
