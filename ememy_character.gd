@@ -22,7 +22,7 @@ func _ready():
 	screen_size = get_viewport_rect().size
 	var tree = get_tree()
 	player_character = tree.get_nodes_in_group("player_character")[0]
-	line2d = tree.get_nodes_in_group("line2d")[0]
+	line2d = $Line2D
 	label = tree.get_nodes_in_group("label1")[0]
 	label3 = tree.get_nodes_in_group("label3")[0]
 	state = 0
@@ -134,6 +134,7 @@ func _on_Area2D_body_exited(body):
 	if(body.name == "player_character"):
 		req_state = 1
 		new_state = 0
+		print("state rquested: ",new_state)
 #		$CollisionShape2D.shape.extents = Vector2(10, 4)
 #		state = 0
 
@@ -144,6 +145,7 @@ func _on_Area2D_body_entered(body):
 	if(body.name == "player_character"):
 		req_state = 1
 		new_state = 1
+		print("state rquested: ",new_state)
 #		$CollisionShape2D.shape.extents = Vector2(24, 4)
 
 
