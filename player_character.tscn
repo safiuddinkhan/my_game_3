@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=2]
+[gd_scene load_steps=77 format=2]
 
 [ext_resource path="res://player_character.gd" type="Script" id=1]
 [ext_resource path="res://Download88812.png" type="Texture" id=2]
@@ -122,6 +122,56 @@ region = Rect2( 768, 1344, 192, 192 )
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 960, 1344, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=111]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=112]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 64, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=113]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 128, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=114]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 192, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=115]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 256, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=116]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 320, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=117]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 384, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=118]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 448, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=119]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 512, 1280, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=120]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 576, 1280, 64, 64 )
 
 [sub_resource type="AtlasTexture" id=66]
 flags = 4
@@ -325,6 +375,11 @@ animations = [ {
 "name": "attack_up",
 "speed": 15.0
 }, {
+"frames": [ SubResource( 111 ), SubResource( 112 ), SubResource( 113 ), SubResource( 114 ), SubResource( 115 ), SubResource( 116 ), SubResource( 117 ), SubResource( 118 ), SubResource( 119 ), SubResource( 120 ) ],
+"loop": false,
+"name": "dead",
+"speed": 15.0
+}, {
 "frames": [ SubResource( 66 ), SubResource( 67 ), SubResource( 68 ), SubResource( 69 ), SubResource( 70 ), SubResource( 71 ), SubResource( 72 ), SubResource( 73 ), SubResource( 74 ) ],
 "loop": true,
 "name": "walk_down",
@@ -346,8 +401,14 @@ animations = [ {
 "speed": 15.0
 } ]
 
-[sub_resource type="CircleShape2D" id=109]
-radius = 8.0
+[sub_resource type="CapsuleShape2D" id=123]
+radius = 4.0
+height = 15.0
+
+[sub_resource type="RectangleShape2D" id=125]
+
+[sub_resource type="RectangleShape2D" id=124]
+extents = Vector2( 11, 24 )
 
 [node name="player_character" type="KinematicBody2D" groups=["player_character"]]
 z_index = 1
@@ -359,6 +420,25 @@ animation = "walk_right"
 offset = Vector2( 0, -26 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 109 )
+rotation = 1.5708
+shape = SubResource( 123 )
+
+[node name="hitbox_player" type="Area2D" parent="."]
+position = Vector2( -1, -20 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox_player"]
+shape = SubResource( 125 )
+
+[node name="hurtbox_player" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hurtbox_player"]
+position = Vector2( -1, -20 )
+shape = SubResource( 124 )
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
+[connection signal="area_entered" from="hitbox_player" to="." method="_on_hitbox_player_area_entered"]
+[connection signal="body_entered" from="hitbox_player" to="." method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
