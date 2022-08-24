@@ -402,7 +402,6 @@ animations = [ {
 } ]
 
 [sub_resource type="RayShape2D" id=173]
-length = 12.0
 
 [sub_resource type="CapsuleShape2D" id=174]
 radius = 4.0
