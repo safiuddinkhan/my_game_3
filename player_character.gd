@@ -10,6 +10,7 @@ var state = 0
 var label2
 export var strength = 5
 var change_scene
+var enemy_collision = {}
 #var enemy_character
 
 
@@ -90,19 +91,19 @@ func _physics_process(_delta):
 		$hitbox_player/CollisionShape2D.disabled = false
 		if pc_dir == 1:
 			$AnimatedSprite.play("attack_left")
-			$hitbox_player/CollisionShape2D.position = Vector2(-44,0)
-			$hitbox_player/CollisionShape2D.shape.extents = Vector2(33,14)
+			$hitbox_player/CollisionShape2D.position = Vector2(-46,-26)
+#			$hitbox_player/CollisionShape2D.shape.extents = Vector2(33,14)
 		elif pc_dir == 2:
 			$AnimatedSprite.play("attack_right")
-			$hitbox_player/CollisionShape2D.shape.extents = Vector2(33,14)
-			$hitbox_player/CollisionShape2D.position = Vector2(44,0)
+#			$hitbox_player/CollisionShape2D.shape.extents = Vector2(33,14)
+			$hitbox_player/CollisionShape2D.position = Vector2(46,-26)
 		elif pc_dir == 3:
-			$hitbox_player/CollisionShape2D.shape.extents = Vector2(40,21)
-			$hitbox_player/CollisionShape2D.position = Vector2(0,-23)
+#			$hitbox_player/CollisionShape2D.shape.extents = Vector2(40,21)
+			$hitbox_player/CollisionShape2D.position = Vector2(0,-56)
 			$AnimatedSprite.play("attack_up")
 		elif pc_dir == 4:
-			$hitbox_player/CollisionShape2D.shape.extents = Vector2(40,21)
-			$hitbox_player/CollisionShape2D.position = Vector2(0,23)
+#			$hitbox_player/CollisionShape2D.shape.extents = Vector2(40,21)
+			$hitbox_player/CollisionShape2D.position = Vector2(0,16)
 			$AnimatedSprite.play("attack_down")
 	
 	elif state == 2:
@@ -148,10 +149,18 @@ func _on_hitbox_body_entered(_body):
 
 
 func _on_hitbox_player_area_entered(area):
+	var enemy_name
 	print("area:",area.name)
 	if area.name == "hurtbox_enemy":
 		var body = area.get_parent()
-		if body.strength > 0:
+		if body.name in enemy_collision:
+			if enemy_collision[body.name] == 1:
+				enemy_name = 1
+			else:
+				enemy_name = 0
+		else:
+			enemy_name = 0
+		if body.strength > 0 and enemy_name == 1:
 			body.strength = body.strength - 1
 			body.hit_highlight()
 			print("name:",body.name," strength:",body.strength)
@@ -161,9 +170,19 @@ func _on_hitbox_player_area_entered(area):
 
 func hit_highlight():
 	$AnimatedSprite.modulate = Color( 1, 0, 0, 1 )
-	$Timer.start(0.5)
+	$Timer.start(0.1)
 	
 
 
 func _on_Timer_timeout():
 	$AnimatedSprite.modulate = Color( 1, 1, 1, 1 )
+
+
+func _on_range_body_entered(body):
+	if body.is_in_group("enemy_character"):
+		enemy_collision[body.name] = 1
+
+
+func _on_range_body_exited(body):
+	if body.is_in_group("enemy_character"):
+		enemy_collision[body.name] = 0

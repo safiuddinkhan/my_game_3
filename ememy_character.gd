@@ -21,7 +21,8 @@ var new_state
 var player_pos
 var enemy_dir
 export var strength = 5
-var v = 0
+
+
 
 
 #var frame_count = 0
@@ -52,7 +53,11 @@ func _ready():
 
 	
 
-
+func walk_mode(toggle):
+	if toggle:
+		walk = 1
+	else:
+		walk = 0
 
 
 
@@ -91,20 +96,10 @@ func get_direction(ang):
 		return ver_dir
 
 
-func check_hit_detection():
-	if enemy_dir == 1 and player_character.pc_dir == 2:
-		return 1
-	elif enemy_dir == 2 and player_character.pc_dir == 1:
-		return 1
-	elif enemy_dir == 3 and player_character.pc_dir == 4:
-		return 1
-	elif enemy_dir == 4 and player_character.pc_dir == 3:
-		return 1
-	else:
-		return 0
+
 func hit_highlight():
 	$AnimatedSprite.modulate = Color( 1, 0, 0, 1 )
-	$Timer.start(0.5)
+	$Timer.start(0.1)
 
 func _physics_process(_delta):
 
@@ -122,8 +117,9 @@ func _physics_process(_delta):
 #		$hitbox_enemy/CollisionShape2D.position = Vector2(0,0)
 		$hitbox_enemy/CollisionShape2D.disabled = true
 		navigate()
+
 		char_ang = floor(rad2deg(direction.angle()))
-		$Area2D.rotation_degrees = char_ang
+#		$Area2D.rotation_degrees = char_ang
 #		sprite_dir = int(char_ang / 60.0)
 #		print("sprite_dir:", char_ang / 60.0," rounded:", sprite_dir, " raw ang:",rad2deg(direction.angle()))
 		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
@@ -133,27 +129,38 @@ func _physics_process(_delta):
 		label3.text = "char_ang:"+str(char_ang)+"dir:"+str(dir1)
 		if dir1 == 1:
 			$AnimatedSprite.play("walk_left")
+#			$Area2D.position = Vector2(-16,0)
 			enemy_dir = 1
 		elif dir1 == 2:
 #		elif abs(sprite_dir) == 0:
 			$AnimatedSprite.play("walk_right")
+#			$Area2D.position = Vector2(16,0)
 			enemy_dir = 2
 		elif dir1 == 3:
 #		elif sprite_dir == -1:
 			$AnimatedSprite.play("walk_up")
+#			$Area2D.position = Vector2(0,-8)
 			enemy_dir = 3
 		elif dir1 == 4:
 #		elif sprite_dir == 1:
 			$AnimatedSprite.play("walk_down")
+#			$Area2D.position = Vector2(0,8)
 			enemy_dir = 4
 		ret_vel = self.move_and_slide(direction * speed)
+
+
+#		print("name:",self.name," collision count:",get_slide_count())
+
+
+#			if(collision.collider.name == "player_character"):
+#				state = 0
 #		$NavigationAgent2D.set_velocity(direction * speed)
 	elif state == 1:
 #		$hitbox/CollisionShape2D.shape.length = 22
 #		$hitbox_enemy/CollisionShape2D.disabled = false
 #		$Timer2.start(0.01)
-		char_ang = floor(rad2deg(direction.angle()))
-		$Area2D.rotation_degrees = char_ang
+		#char_ang = floor(rad2deg(direction.angle()))
+#		$Area2D.rotation_degrees = char_ang
 
 		if $AnimatedSprite.frame == 3:
 			$hitbox_enemy/CollisionShape2D.disabled = false
@@ -162,20 +169,20 @@ func _physics_process(_delta):
 
 		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
 		if enemy_dir == 1:
-			$hitbox_enemy/CollisionShape2D.position = Vector2(-44,0)
-			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(33,14)
+			$hitbox_enemy/CollisionShape2D.position = Vector2(-46,-26)
+#			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(33,14)
 			$AnimatedSprite.play("attack_left")
 		elif enemy_dir == 2:
-			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(33,14)
-			$hitbox_enemy/CollisionShape2D.position = Vector2(44,0)
+#			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(33,14)
+			$hitbox_enemy/CollisionShape2D.position = Vector2(46,-26)
 			$AnimatedSprite.play("attack_right")
 		elif enemy_dir == 3:
-			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(40,21)
-			$hitbox_enemy/CollisionShape2D.position = Vector2(0,-23)
+#			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(40,21)
+			$hitbox_enemy/CollisionShape2D.position = Vector2(0,-56)
 			$AnimatedSprite.play("attack_up")
 		elif enemy_dir == 4:
-			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(40,21)
-			$hitbox_enemy/CollisionShape2D.position = Vector2(0,23)
+#			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(40,21)
+			$hitbox_enemy/CollisionShape2D.position = Vector2(0,16)
 			$AnimatedSprite.play("attack_down")
 		
 #		if player_character.state == 1:
@@ -192,6 +199,9 @@ func _physics_process(_delta):
 	elif state == 2:
 		$AnimatedSprite.play("dead")
 		req_state = 0
+	elif state == -1:
+		$AnimatedSprite.stop()
+
 
 #		frame_count = frame_count + 1
 
@@ -212,9 +222,6 @@ func _physics_process(_delta):
 
 
 
-func _on_NavigationAgent2D_navigation_finished():
-	state = 1
-	#$AnimatedSprite.stop()
 
 
 
@@ -231,27 +238,6 @@ func _on_NavigationAgent2D_velocity_computed(safe_velocity):
 
 
 
-func _on_Area2D_body_exited(body):
-#	print("body exited:",body.name)
-	if(body.name == "player_character"):
-		req_state = 1
-		new_state = 0
-#		print("state rquested: ",new_state)
-#		$CollisionShape2D.shape.extents = Vector2(10, 4)
-#		state = 0
-
-
-
-func _on_Area2D_body_entered(body):
-#	print("body entered:",body.name)
-	if(body.name == "player_character"):
-		state = 1
-
-
-#		req_state = 1
-#		new_state = 1
-#		print("state rquested: ",new_state)
-#		$CollisionShape2D.shape.extents = Vector2(24, 4)
 
 
 
@@ -290,10 +276,7 @@ func _on_AnimatedSprite_animation_finished():
 
 
 func _on_NavigationAgent2D_target_reached():
-	if walk == 0:
-		state = 1
-	else:
-
+	if walk == 1:
 		if walk_state == 0:
 			walk_state = 1
 			player_pos = start_pos
@@ -332,6 +315,10 @@ func _on_hitbox_enemy_area_entered(area):
 	elif area.name == "hitbox_player":
 		print("enemy:miss")
 
+func request_state(st):
+	req_state = 1
+	new_state = st
+
 
 func _on_Timer2_timeout():
 	print("timeout")
@@ -339,3 +326,19 @@ func _on_Timer2_timeout():
 		$hitbox_enemy/CollisionShape2D.disabled = false
 	else:
 		$hitbox_enemy/CollisionShape2D.disabled = true
+
+
+func _on_range_body_entered(body):
+	if(body.name == "player_character"):
+		request_state(1)
+
+
+
+func _on_range_body_exited(body):
+	if(body.name == "player_character"):
+		request_state(0)
+	#body.enemy_collision[self.name] = 0
+
+
+func _on_NavigationAgent2D_navigation_finished():
+	pass # Replace with function body.

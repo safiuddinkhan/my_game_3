@@ -21,7 +21,7 @@ func _on_Area2D_body_entered(body):
 		print("player entered area")
 		enemy_body = get_node_or_null("YSort/enemy_character")
 		if enemy_body:
-			enemy_body.walk = 0
+			enemy_body.walk_mode(false)
 
 	
 
@@ -32,4 +32,4 @@ func _on_Area2D_body_exited(body):
 		print("player exited area")
 		enemy_body = get_node_or_null("YSort/enemy_character")
 		if enemy_body:
-			enemy_body.walk = 1
+			enemy_body.walk_mode(true)
