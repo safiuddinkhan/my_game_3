@@ -16,8 +16,8 @@ var enemy_collision = {}
 
 func _ready():
 	screen_size = get_viewport_rect().size
-	var tree = get_tree()
-	label2 = tree.get_nodes_in_group("label2")[0]
+#	var tree = get_tree()
+	#label2 = tree.get_nodes_in_group("label2")[0]
 #	enemy_character = tree.get_nodes_in_group("enemy_character")[0]
 	state = 0
 #	Navigation2DServer.agent_set_map($NavigationObstacle2D.get_rid(),get_world_2d().navigation_map)
@@ -42,8 +42,8 @@ func check_ani_direction():
 func _physics_process(_delta):
 	direction = Vector2.ZERO
 #	var distance = 0
-	label2.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state:"+str(state)
-	label2.text = "player 1 strength:"+str(strength)
+	#label2.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state:"+str(state)
+	#label2.text = "player 1 strength:"+str(strength)
 	if Input.is_action_just_pressed("ui_attack"):
 		state = 1
 	

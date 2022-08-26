@@ -1,11 +1,22 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://enemy_character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://main.gd" type="Script" id=2]
+[ext_resource path="res://gold_pile_19.png" type="Texture" id=3]
 [ext_resource path="res://terrain_atlas.png" type="Texture" id=5]
 [ext_resource path="res://pillar.png" type="Texture" id=6]
 [ext_resource path="res://red_tile.png" type="Texture" id=7]
 [ext_resource path="res://player_character.tscn" type="PackedScene" id=8]
+
+[sub_resource type="NavigationPolygon" id=257]
+vertices = PoolVector2Array( 500, 144, 500, 204, 428, 204, 140, 144, 428, 260, 356, 260, 356, 240, 356, 236, 356, 204, 284, 204, 284, 240, 212, 240, 212, 204, 140, 204 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ), PoolIntArray( 2, 4, 5, 6 ), PoolIntArray( 2, 6, 7 ), PoolIntArray( 2, 7, 8 ), PoolIntArray( 3, 2, 8 ), PoolIntArray( 3, 8, 9 ), PoolIntArray( 9, 10, 11, 12 ), PoolIntArray( 3, 9, 12 ), PoolIntArray( 3, 12, 13 ) ]
+outlines = [ PoolVector2Array( 500, 204, 428, 204, 428, 260, 356, 260, 356, 240, 356, 236, 356, 204, 284, 204, 284, 240, 212, 240, 212, 204, 140, 204, 140, 144, 500, 144 ) ]
+
+[sub_resource type="NavigationPolygon" id=258]
+vertices = PoolVector2Array( 500, 260, 500, 320, 140, 320, 428, 260, 356, 260, 348, 260, 340, 260, 332, 260, 284, 260, 140, 260, 212, 260, 212, 240, 284, 240 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ), PoolIntArray( 4, 3, 2 ), PoolIntArray( 5, 4, 2 ), PoolIntArray( 6, 5, 2 ), PoolIntArray( 7, 6, 2 ), PoolIntArray( 8, 7, 2 ), PoolIntArray( 2, 9, 10 ), PoolIntArray( 8, 2, 10 ), PoolIntArray( 8, 10, 11, 12 ) ]
+outlines = [ PoolVector2Array( 500, 260, 428, 260, 356, 260, 348, 260, 340, 260, 332, 260, 284, 260, 284, 240, 212, 240, 212, 260, 140, 260, 140, 320, 500, 320 ) ]
 
 [sub_resource type="ConvexPolygonShape2D" id=243]
 points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
@@ -212,10 +223,19 @@ points = PoolVector2Array( 32, 32, 0, 32, 0, 0, 32, 0 )
 8/z_index = 0
 
 [sub_resource type="RectangleShape2D" id=250]
-extents = Vector2( 52, 168 )
+extents = Vector2( 180, 88 )
+
+[sub_resource type="CapsuleShape2D" id=259]
+height = 12.0
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 2 )
+
+[node name="NavigationPolygonInstance2" type="NavigationPolygonInstance" parent="."]
+navpoly = SubResource( 257 )
+
+[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="NavigationPolygonInstance2"]
+navpoly = SubResource( 258 )
 
 [node name="collision-mesh" type="TileMap" parent="."]
 tile_set = SubResource( 244 )
@@ -224,10 +244,18 @@ format = 1
 tile_data = PoolIntArray( 393220, 0, 0, 393221, 0, 0, 393222, 0, 0, 393223, 0, 0, 393224, 0, 0, 393225, 0, 0, 393226, 0, 0, 393227, 0, 0, 393228, 0, 0, 393229, 0, 0, 393230, 0, 0, 393231, 0, 0, 393232, 0, 0, 393233, 0, 0, 393234, 0, 0, 393235, 0, 0, 393236, 0, 0, 393237, 0, 0, 393238, 0, 0, 393239, 0, 0, 393240, 0, 0, 393241, 0, 0, 393242, 0, 0, 393243, 0, 0, 393244, 0, 0, 393245, 0, 0, 393246, 0, 0, 393247, 0, 0, 393248, 0, 0, 393249, 0, 0, 393250, 0, 0, 393251, 0, 0, 393252, 0, 0, 393253, 0, 0, 393254, 0, 0, 393255, 0, 0, 393256, 0, 0, 393257, 0, 0, 393258, 0, 0, 393259, 0, 0, 393260, 0, 0, 393261, 0, 0, 393262, 0, 0, 393263, 0, 0, 393264, 0, 0, 393265, 0, 0, 393266, 0, 0, 393267, 0, 0, 393268, 0, 0, 393269, 0, 0, 393270, 0, 0, 393271, 0, 0, 393272, 0, 0, 393273, 0, 0, 393274, 0, 0, 393275, 0, 0, 393276, 0, 0, 393277, 0, 0, 393278, 0, 0, 393279, 0, 0, 393280, 0, 0, 393281, 0, 0, 393282, 0, 0, 393283, 0, 0, 393284, 0, 0, 393285, 0, 0, 393286, 0, 0, 393287, 0, 0, 393288, 0, 0, 393289, 0, 0, 393290, 0, 0, 393291, 0, 0, 458756, 0, 0, 458827, 0, 0, 524292, 0, 0, 524363, 0, 0, 589828, 0, 0, 589899, 0, 0, 655364, 0, 0, 655435, 0, 0, 720900, 0, 0, 720971, 0, 0, 786436, 0, 0, 786507, 0, 0, 851972, 0, 0, 852043, 0, 0, 917508, 0, 0, 917579, 0, 0, 983044, 0, 0, 983115, 0, 0, 1048580, 0, 0, 1048651, 0, 0, 1114116, 0, 0, 1114187, 0, 0, 1179652, 0, 0, 1179723, 0, 0, 1245188, 0, 0, 1245259, 0, 0, 1310724, 0, 0, 1310795, 0, 0, 1376260, 0, 0, 1376331, 0, 0, 1441796, 0, 0, 1441867, 0, 0, 1507332, 0, 0, 1507403, 0, 0, 1572868, 0, 0, 1572939, 0, 0, 1638404, 0, 0, 1638475, 0, 0, 1703940, 0, 0, 1704011, 0, 0, 1769476, 0, 0, 1769492, 0, 0, 1769493, 0, 0, 1769494, 0, 0, 1769495, 0, 0, 1769528, 0, 0, 1769529, 0, 0, 1769530, 0, 0, 1769531, 0, 0, 1769547, 0, 0, 1835012, 0, 0, 1835028, 0, 0, 1835029, 0, 0, 1835030, 0, 0, 1835031, 0, 0, 1835064, 0, 0, 1835065, 0, 0, 1835066, 0, 0, 1835067, 0, 0, 1835083, 0, 0, 1900548, 0, 0, 1900564, 0, 0, 1900565, 0, 0, 1900566, 0, 0, 1900567, 0, 0, 1900600, 0, 0, 1900601, 0, 0, 1900602, 0, 0, 1900603, 0, 0, 1900619, 0, 0, 1966084, 0, 0, 1966100, 0, 0, 1966101, 0, 0, 1966102, 0, 0, 1966103, 0, 0, 1966136, 0, 0, 1966137, 0, 0, 1966138, 0, 0, 1966139, 0, 0, 1966155, 0, 0, 2031620, 0, 0, 2031691, 0, 0, 2097156, 0, 0, 2097227, 0, 0, 2162692, 0, 0, 2162763, 0, 0, 2228228, 0, 0, 2228299, 0, 0, 2293764, 0, 0, 2293835, 0, 0, 2359300, 0, 0, 2359371, 0, 0, 2424836, 0, 0, 2424907, 0, 0, 2490372, 0, 0, 2490443, 0, 0, 2555908, 0, 0, 2555979, 0, 0, 2621444, 0, 0, 2621515, 0, 0, 2686980, 0, 0, 2687051, 0, 0, 2752516, 0, 0, 2752587, 0, 0, 2818052, 0, 0, 2818123, 0, 0, 2883588, 0, 0, 2883659, 0, 0, 2949124, 0, 0, 2949195, 0, 0, 3014660, 0, 0, 3014731, 0, 0, 3080196, 0, 0, 3080267, 0, 0, 3145732, 0, 0, 3145803, 0, 0, 3211268, 0, 0, 3211339, 0, 0, 3276804, 0, 0, 3276875, 0, 0, 3342340, 0, 0, 3342411, 0, 0, 3407876, 0, 0, 3407947, 0, 0, 3473412, 0, 0, 3473413, 0, 0, 3473414, 0, 0, 3473415, 0, 0, 3473416, 0, 0, 3473417, 0, 0, 3473418, 0, 0, 3473419, 0, 0, 3473420, 0, 0, 3473421, 0, 0, 3473422, 0, 0, 3473423, 0, 0, 3473424, 0, 0, 3473425, 0, 0, 3473426, 0, 0, 3473427, 0, 0, 3473428, 0, 0, 3473429, 0, 0, 3473430, 0, 0, 3473431, 0, 0, 3473432, 0, 0, 3473433, 0, 0, 3473434, 0, 0, 3473435, 0, 0, 3473436, 0, 0, 3473437, 0, 0, 3473438, 0, 0, 3473439, 0, 0, 3473440, 0, 0, 3473441, 0, 0, 3473442, 0, 0, 3473443, 0, 0, 3473444, 0, 0, 3473445, 0, 0, 3473446, 0, 0, 3473447, 0, 0, 3473448, 0, 0, 3473449, 0, 0, 3473450, 0, 0, 3473451, 0, 0, 3473452, 0, 0, 3473453, 0, 0, 3473454, 0, 0, 3473455, 0, 0, 3473456, 0, 0, 3473457, 0, 0, 3473458, 0, 0, 3473459, 0, 0, 3473460, 0, 0, 3473461, 0, 0, 3473462, 0, 0, 3473463, 0, 0, 3473464, 0, 0, 3473465, 0, 0, 3473466, 0, 0, 3473467, 0, 0, 3473468, 0, 0, 3473469, 0, 0, 3473470, 0, 0, 3473471, 0, 0, 3473472, 0, 0, 3473473, 0, 0, 3473474, 0, 0, 3473475, 0, 0, 3473476, 0, 0, 3473477, 0, 0, 3473478, 0, 0, 3473479, 0, 0, 3473480, 0, 0, 3473481, 0, 0, 3473482, 0, 0, 3473483, 0, 0 )
 
 [node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="."]
+visible = false
 navpoly = SubResource( 248 )
+enabled = false
 
 [node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="NavigationPolygonInstance"]
+visible = false
 navpoly = SubResource( 249 )
+enabled = false
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+visible = false
+polygon = PoolVector2Array( 224, 208, 416, 208, 416, 256, 224, 256 )
 
 [node name="floor" type="TileMap" parent="."]
 tile_set = SubResource( 207 )
@@ -245,20 +273,20 @@ tile_data = PoolIntArray( 65537, 0, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65
 position = Vector2( 112, 224 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( -8, 16 )
+position = Vector2( 208, 8 )
 shape = SubResource( 250 )
 
 [node name="YSort" type="YSort" parent="."]
 
 [node name="player_character" parent="YSort" instance=ExtResource( 8 )]
-position = Vector2( 320, 224 )
+position = Vector2( 343, 357 )
 strength = 100
 
 [node name="enemy_character" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 64, 224 )
-start_pos = Vector2( 64, 224 )
-end_pos = Vector2( 128, 224 )
-walk = 1
+position = Vector2( 224, 208 )
+speed = 70
+walk = true
+strength = 10
 
 [node name="sprite2" type="Sprite" parent="YSort"]
 position = Vector2( 176, 232 )
@@ -272,52 +300,32 @@ z_index = 1
 texture = ExtResource( 6 )
 offset = Vector2( 0, -32 )
 
-[node name="enemy_character2" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 556, 384 )
+[node name="StaticBody2D" type="StaticBody2D" parent="YSort"]
+position = Vector2( 320, 240 )
+z_index = 1
 
-[node name="enemy_character3" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 508, 324 )
+[node name="sprite3" type="Sprite" parent="YSort/StaticBody2D"]
+texture = ExtResource( 3 )
+offset = Vector2( 0, -16 )
 
-[node name="enemy_character4" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 460, 124 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/StaticBody2D"]
+position = Vector2( 0, -10 )
+rotation = 1.5708
+shape = SubResource( 259 )
 
-[node name="enemy_character5" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 316, 352 )
-
-[node name="enemy_character6" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 260, 112 )
-
-[node name="enemy_character7" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 416, 364 )
-
-[node name="enemy_character8" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 528, 196 )
-
-[node name="enemy_character9" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 404, 264 )
-
-[node name="enemy_character10" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( 244, 304 )
-
-[node name="Label" type="Label" parent="." groups=["label1"]]
-margin_left = 16.0
+[node name="ProgressBar" type="ProgressBar" parent="."]
+margin_left = 68.0
 margin_top = 8.0
-margin_right = 133.0
-margin_bottom = 22.0
-text = "frame_animation: \"\" frame_count: 0"
+margin_right = 272.0
+margin_bottom = 28.0
+percent_visible = false
 
-[node name="Label2" type="Label" parent="." groups=["label2"]]
-margin_left = 16.0
-margin_top = 28.0
-margin_right = 56.0
-margin_bottom = 42.0
-text = "frame_animation: \"\" frame_count: 0"
-
-[node name="Label3" type="Label" parent="." groups=["label3"]]
-margin_left = 16.0
-margin_top = 48.0
-margin_right = 56.0
-margin_bottom = 62.0
+[node name="Label" type="Label" parent="."]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 63.0
+margin_bottom = 26.0
+text = "Player 1"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

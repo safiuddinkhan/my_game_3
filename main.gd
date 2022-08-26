@@ -8,12 +8,14 @@ var enemy_body
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
+	$YSort/enemy_character.set_follow_path($Polygon2D.polygon)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+func _process(_delta):
+	$ProgressBar.value = $YSort/player_character.strength
 
 
 func _on_Area2D_body_entered(body):

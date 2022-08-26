@@ -4,7 +4,7 @@
 [ext_resource path="res://Download88812.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=126]
-radius = 22.0
+radius = 24.0
 
 [sub_resource type="AtlasTexture" id=90]
 flags = 4
@@ -430,16 +430,17 @@ animation = "walk_right"
 offset = Vector2( 0, -26 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 rotation = 1.5708
 shape = SubResource( 123 )
 
 [node name="hitbox_player" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox_player"]
 shape = SubResource( 125 )
 
 [node name="hurtbox_player" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hurtbox_player"]
 position = Vector2( 0, -20 )

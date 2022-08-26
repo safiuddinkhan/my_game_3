@@ -1,15 +1,15 @@
 extends KinematicBody2D
 
 export var speed = 40
-export var start_pos:Vector2 = Vector2.ZERO
-export var end_pos:Vector2 = Vector2.ZERO
+#export var start_pos:Vector2 = Vector2.ZERO
+#export var end_pos:Vector2 = Vector2.ZERO
 var leader_state = 0
 var screen_size = Vector2.ZERO
 var direction = Vector2.ZERO
 var player_character
 var ret_vel
 var state = 0
-export var walk = 0
+export var walk:bool = false
 var walk_state = 0
 var line2d
 var char_ang
@@ -21,7 +21,8 @@ var new_state
 var player_pos
 var enemy_dir
 export var strength = 5
-
+var path_to_go:PoolVector2Array
+var path_count
 
 
 
@@ -34,23 +35,35 @@ func _ready():
 	var tree = get_tree()
 	player_character = tree.get_nodes_in_group("player_character")[0]
 	line2d = $Line2D
-	label = tree.get_nodes_in_group("label1")[0]
-	label3 = tree.get_nodes_in_group("label3")[0]
+#	label = tree.get_nodes_in_group("label1")[0]
+#	label3 = tree.get_nodes_in_group("label3")[0]
 	state = 0
 	req_state = 0
 	new_state = 0
 	leader_state = 0
 	enemy_dir = 0
-
+	#path_count = 1
+	
 
 	
-	if walk == 1:
-		player_pos = end_pos
-		walk_state = 0
+	
+	if walk == true:
+		state = -1
+
+#		player_pos = path_to_go[path_count]
+#		walk_state = 0
 
 #	$NavigationAgent2D.path_max_distance = 1
 
-
+func set_follow_path(polygon:PoolVector2Array):
+	path_to_go = polygon
+	path_count = 1
+	player_pos = path_to_go[path_count]
+	state = 0
+	for i in polygon:
+		print(self.name,": ",i)
+	
+	
 	
 
 func walk_mode(toggle):
@@ -64,7 +77,7 @@ func walk_mode(toggle):
 func navigate():
 	var next_location
 	
-	if walk == 0:
+	if walk == false:
 		player_pos = player_character.global_position
 		
 	$NavigationAgent2D.set_target_location(Navigation2DServer.map_get_closest_point($NavigationAgent2D.get_navigation_map(),player_pos))
@@ -122,11 +135,11 @@ func _physics_process(_delta):
 #		$Area2D.rotation_degrees = char_ang
 #		sprite_dir = int(char_ang / 60.0)
 #		print("sprite_dir:", char_ang / 60.0," rounded:", sprite_dir, " raw ang:",rad2deg(direction.angle()))
-		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
+#		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
 
 #		if abs(sprite_dir) >= 2:
 		var dir1 = get_direction(char_ang)
-		label3.text = "char_ang:"+str(char_ang)+"dir:"+str(dir1)
+#		label3.text = "char_ang:"+str(char_ang)+"dir:"+str(dir1)
 		if dir1 == 1:
 			$AnimatedSprite.play("walk_left")
 #			$Area2D.position = Vector2(-16,0)
@@ -146,7 +159,7 @@ func _physics_process(_delta):
 			$AnimatedSprite.play("walk_down")
 #			$Area2D.position = Vector2(0,8)
 			enemy_dir = 4
-		ret_vel = self.move_and_slide(direction * speed)
+#		ret_vel = self.move_and_slide(direction * speed)
 
 
 #		print("name:",self.name," collision count:",get_slide_count())
@@ -154,7 +167,7 @@ func _physics_process(_delta):
 
 #			if(collision.collider.name == "player_character"):
 #				state = 0
-#		$NavigationAgent2D.set_velocity(direction * speed)
+		$NavigationAgent2D.set_velocity(direction * speed)
 	elif state == 1:
 #		$hitbox/CollisionShape2D.shape.length = 22
 #		$hitbox_enemy/CollisionShape2D.disabled = false
@@ -167,7 +180,7 @@ func _physics_process(_delta):
 		elif $AnimatedSprite.frame == 5:
 			$hitbox_enemy/CollisionShape2D.disabled = true
 
-		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
+#		label.text = "frame animation:\""+$AnimatedSprite.animation+"\" frame_count:"+str($AnimatedSprite.frame)+" state_req_reg: "+str(req_state)+" curr state:"+str(state)
 		if enemy_dir == 1:
 			$hitbox_enemy/CollisionShape2D.position = Vector2(-46,-26)
 #			$hitbox_enemy/CollisionShape2D.shape.extents = Vector2(33,14)
@@ -276,13 +289,19 @@ func _on_AnimatedSprite_animation_finished():
 
 
 func _on_NavigationAgent2D_target_reached():
-	if walk == 1:
-		if walk_state == 0:
-			walk_state = 1
-			player_pos = start_pos
-		elif walk_state == 1:
-			walk_state = 0
-			player_pos = end_pos
+	if walk == true:
+		if path_count == path_to_go.size()-1:
+			path_count = 0
+		else:
+			path_count = path_count + 1
+		player_pos = path_to_go[path_count]
+
+#		if walk_state == 0:
+#			walk_state = 1
+#			player_pos = start_pos
+#		elif walk_state == 1:
+#			walk_state = 0
+#			player_pos = end_pos
 
 
 func _on_NavigationAgent2D_path_changed():
